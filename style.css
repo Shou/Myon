@@ -1,0 +1,17 @@
+
+body {
+    margin: 0;
+    padding: 0;
+    background-image: -moz-radial-gradient(center, circle fartheast-corner, #FF0000 0%, #101010 100%);
+    background-image: -webkit-radial-gradient(center, circle fartheast-corner, #FF0000 0%, #101010 100%);
+    background-color: #101010;
+    color: pink;
+    font-family: helvetica; }
+
+#canvas {
+    background-image: none;
+    width: 100%;
+    height: 100%; }
+
+div img {
+    
