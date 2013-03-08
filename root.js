@@ -1,7 +1,7 @@
 
 // {{{ Headers
 
-// Author: Shou
+// Author: Shou (Benedict Aas)
 // Version: 0.39
 // License: GPL3
 // Description: Colorful platform jumping game using HTML5 canvas.
@@ -117,6 +117,7 @@ function gen(block){
     var x = Math.floor(Math.random() * 200) + indent
     var y = block.coords.y + (Math.floor(Math.random() * 400) - 200)
     // TODO make this good (and not bad)
+    // Eh, it Just Works™. Who cares. ┐('～`；)┌
     y = y > 100 && y < 1000 ? y : 500
     speedX = Math.random() * 4 + 5
 
@@ -131,7 +132,7 @@ function ren(block){
     ctx.save()
 }
 
-// | Render the goddamn ball.
+// | Render the ball on the canvas.
 // makeBall :: Graphics -> IO ()
 function makeBall(ball){
     var x = ball.coords.x
@@ -187,12 +188,15 @@ function main(){
     map(ren, steps)
     loop = setInterval(function(){
         ctx.clearRect(0, 0, 1920, 1080)
+        // accelerate left
         if (37 in Keyboard) {
             // I'm sorry Stallman-sama, I promise I won't break the 80-col limit
             // any more.
             movementX = (movementX < -9 ? -10 : (movementX < 0 ? movementX : -1) * 1.3)
+        // accelerate right
         } else if (39 in Keyboard) {
             movementX = (movementX > 9 ? 10 : (movementX > 0 ? movementX : 1) * 1.3) // orz
+        // slow down the ball
         } else {
             movementX = Math.floor(movementX * 0.7)
         }
@@ -224,6 +228,7 @@ function main(){
             ren(step)
         }
         steps = tmp
+
         // falling/jumping
         movementY = movementY > 9 ? 10 : (Math.round(movementY) == 0 ? 1 : movementY) * 1.3 // ;_;
         if (movementY < 0) movementY *= 0.60
@@ -245,9 +250,11 @@ function main(){
             // times the trippy text effect should be applied
             var i = 17
             var time = getPOSIXTime() - starttime
+
             // no accidental instant restart
             setTimeout(function(){ starttime = 0 }, 500)
             score = 0
+
             var tmp = setInterval(function(){
                 ctx.fillStyle = colors[keys(colors)[i % 6]]
                 var f = function(msg0, msg1){
@@ -271,8 +278,12 @@ function main(){
                     i--
                 }
                 f("GAME OVER, LOSER.", "You lasted " + time + " seconds.")
+
+                // stop making trippy effects
                 if (i === 1) clearInterval(tmp)
             }, 1000 / 60)
+
+            // stop the game
             clearInterval(loop)
         }
     }, 1000 / 60) // MAXIMUM FPS!!!!!!! Unless your monitor is 120 Hz or higher.
